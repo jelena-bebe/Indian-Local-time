@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<h2>Convert Time Between Local and Indian Time</h2>
+
+<!-- Input for Indian Time -->
+<label for="indianTime">Enter Indian Time (HH:MM):</label>
+<input type="time" id="indianTime" name="indianTime">
+<button type="button" onclick="convertToLocalTime()">Convert to Local Time</button>
+
+<p id="localTimeResult"></p>
+
+<!-- Input for Local Time -->
+<label for="localTime">Enter Local Time (HH:MM):</label>
+<input type="time" id="localTime" name="localTime">
+<button type="button" onclick="convertToIndianTime()">Convert to Indian Time</button>
+
+<p id="indianTimeResult"></p>
+
+<script>
+// Convert Indian Time to Local Time
+function convertToLocalTime() {
+    let indianTimeInput = document.getElementById("indianTime").value;
+    if (indianTimeInput) {
+        let [hours, minutes] = indianTimeInput.split(":");
+        let indianDate = new Date();
+        indianDate.setHours(hours, minutes);
+
+        // Adjust to Local Time
+        let indianOffset = 5.5 * 60; // IST offset in minutes (UTC+5:30)
+        let localOffset = indianDate.getTimezoneOffset(); // Local time offset in minutes
+        let difference = indianOffset + localOffset; // Calculate the difference in minutes
+
+        let localDate = new Date(indianDate.getTime() - difference * 60 * 1000);
+
+        // Display the result
+        document.getElementById("localTimeResult").innerHTML = 
+            "Local Time: " + localDate.toLocaleTimeString();
+    } else {
+        alert("Please enter Indian time.");
+    }
+}
+
+// Convert Local Time to Indian Time
+function convertToIndianTime() {
+    let localTimeInput = document.getElementById("localTime").value;
+    if (localTimeInput) {
+        let [hours, minutes] = localTimeInput.split(":");
+        let localDate = new Date();
+        localDate.setHours(hours, minutes);
+
+        // Adjust to Indian Time
+        let indianOffset = 5.5 * 60; // IST offset in minutes (UTC+5:30)
+        let localOffset = localDate.getTimezoneOffset(); // Local time offset in minutes
+        let difference = indianOffset - localOffset; // Calculate the difference in minutes
+
+        let indianDate = new Date(localDate.getTime() + difference * 60 * 1000);
+
+        // Display the result
+        document.getElementById("indianTimeResult").innerHTML = 
+            "Indian Time: " + indianDate.toLocaleTimeString("en-IN", {timeZone: "Asia/Kolkata"});
+    } else {
+        alert("Please enter local time.");
+    }
+}
+</script>
+
+</body>
+</html>
